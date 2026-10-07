@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Home | SalesPro{% endblock %}
+{% block content %}
+<section class="hero">
+    <div>
+        <span class="eyebrow">FULL-STACK SALES PROJECT</span>
+        <h1>Sales Data Analysis & Billing System</h1>
+        <p>Create bills, save every transaction to CSV, and analyze your best-selling products and monthly revenue.</p>
+        <div class="actions">
+            <a class="btn primary" href="{{ url_for('billing') }}">Create New Bill</a>
+            <a class="btn secondary" href="{{ url_for('dashboard') }}">Open Dashboard</a>
+        </div>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="stat"><span>Total Sales</span><strong>₹{{ "%.2f"|format(data.total_sales) }}</strong></div>
+    <div class="stat"><span>Total Bills</span><strong>{{ data.total_bills }}</strong></div>
+    <div class="stat"><span>Items Sold</span><strong>{{ data.total_items }}</strong></div>
+    <div class="stat"><span>Best Product</span><strong>{{ data.best_product }}</strong></div>
+</section>
+
+<section class="grid-2">
+    <div class="panel">
+        <h2>What this project does</h2>
+        <ul class="feature-list">
+            <li>Customer billing with multiple products</li>
+            <li>Automatic bill number and total calculation</li>
+            <li>CSV-based sales storage</li>
+            <li>Sales history</li>
+            <li>Best-selling product analysis</li>
+            <li>Monthly sales charts</li>
+        </ul>
+    </div>
+    <div class="panel">
+        <h2>Quick API</h2>
+        <p>Backend REST endpoints are available for integration:</p>
+        <code>GET /api/products</code>
+        <code>GET /api/sales</code>
+        <code>GET /api/dashboard</code>
+    </div>
+</section>
+{% endblock %}

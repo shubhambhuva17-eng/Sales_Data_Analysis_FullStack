@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | SalesPro{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">ANALYTICS</span>
+        <h1>Sales Dashboard</h1>
+    </div>
+</div>
+
+<section class="stats">
+    <div class="stat"><span>Total Revenue</span><strong>₹{{ "%.2f"|format(data.total_sales) }}</strong></div>
+    <div class="stat"><span>Total Bills</span><strong>{{ data.total_bills }}</strong></div>
+    <div class="stat"><span>Items Sold</span><strong>{{ data.total_items }}</strong></div>
+    <div class="stat"><span>Best Product</span><strong>{{ data.best_product }}</strong></div>
+</section>
+
+<section class="charts">
+    <div class="panel chart-panel">
+        <h2>Best Selling Products</h2>
+        <canvas id="productChart"></canvas>
+    </div>
+    <div class="panel chart-panel">
+        <h2>Monthly Sales</h2>
+        <canvas id="monthlyChart"></canvas>
+    </div>
+    <div class="panel chart-panel">
+        <h2>Revenue by Product</h2>
+        <canvas id="revenueChart"></canvas>
+    </div>
+</section>
+
+<script id="dashboard-data" type="application/json">{{ data|tojson }}</script>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+{% endblock %}

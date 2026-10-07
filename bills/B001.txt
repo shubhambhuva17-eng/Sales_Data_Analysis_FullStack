@@ -1,0 +1,11 @@
+SALES INVOICE
+==================================================
+Bill No : B001
+Date    : 07-10-2026
+Customer: shubham
+--------------------------------------------------
+Laptop | Qty: 1 | Price: Rs.45000.00 | Total: Rs.45000.00
+Keyboard | Qty: 1 | Price: Rs.1200.00 | Total: Rs.1200.00
+Mouse | Qty: 1 | Price: Rs.600.00 | Total: Rs.600.00
+--------------------------------------------------
+Grand Total: Rs.46800.00
