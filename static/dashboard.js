@@ -51,3 +51,40 @@ new Chart(document.getElementById("revenueChart"), {
     },
     options: commonOptions
 });
+
+const profitCanvas = document.getElementById("profitChart");
+if (profitCanvas && data.profit_product_names) {
+    new Chart(profitCanvas, {
+        type: "bar",
+        data: {
+            labels: data.profit_product_names,
+            datasets: [{
+                label: "Profit (₹)",
+                data: data.profit_product_values,
+                backgroundColor: "rgba(16, 185, 129, 0.75)",
+                borderColor: "rgb(16, 185, 129)",
+                borderWidth: 1.5,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            ...commonOptions,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: (value) => "₹" + Number(value).toLocaleString()
+                    }
+                }
+            },
+            plugins: {
+                ...commonOptions.plugins,
+                tooltip: {
+                    callbacks: {
+                        label: (context) => " Profit: ₹" + Number(context.raw).toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    }
+                }
+            }
+        }
+    });
+}

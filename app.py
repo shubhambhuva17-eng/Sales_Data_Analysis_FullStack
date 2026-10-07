@@ -14,14 +14,14 @@ BILLS_DIR = BASE_DIR / "bills"
 BILLS_DIR.mkdir(exist_ok=True)
 
 PRODUCTS = [
-    {"name": "Laptop", "price": 45000},
-    {"name": "Mobile", "price": 18000},
-    {"name": "Keyboard", "price": 1200},
-    {"name": "Mouse", "price": 600},
-    {"name": "Monitor", "price": 10000},
-    {"name": "Printer", "price": 8000},
-    {"name": "Headphone", "price": 1500},
-    {"name": "USB Cable", "price": 300},
+    {"name": "Laptop", "price": 45000, "cost": 38000},
+    {"name": "Mobile", "price": 18000, "cost": 15000},
+    {"name": "Keyboard", "price": 1200, "cost": 800},
+    {"name": "Mouse", "price": 600, "cost": 400},
+    {"name": "Monitor", "price": 10000, "cost": 8000},
+    {"name": "Printer", "price": 8000, "cost": 6500},
+    {"name": "Headphone", "price": 1500, "cost": 1000},
+    {"name": "USB Cable", "price": 300, "cost": 180},
 ]
 
 HEADERS = ["Date", "Bill No", "Customer", "Product", "Quantity", "Price", "Total"]
@@ -57,9 +57,11 @@ def dashboard_data():
     sales = read_sales()
     product_qty = defaultdict(int)
     product_revenue = defaultdict(float)
+    product_profit = defaultdict(float)
     monthly_revenue = defaultdict(float)
 
     total_revenue = 0.0
+    total_profit = 0.0
     total_items = 0
     bills = set()
 
@@ -73,6 +75,12 @@ def dashboard_data():
         total_items += qty
         bills.add(row["Bill No"])
 
+        prod_obj = get_product(product)
+        cost_price = float(prod_obj.get("cost", 0)) if prod_obj else 0.0
+        profit = (float(row["Price"]) - cost_price) * qty
+        product_profit[product] += profit
+        total_profit += profit
+
         try:
             dt = datetime.strptime(row["Date"], "%d-%m-%Y")
             month = dt.strftime("%Y-%m")
@@ -82,16 +90,22 @@ def dashboard_data():
 
     products = sorted(product_qty.items(), key=lambda x: x[1], reverse=True)
     revenue_products = sorted(product_revenue.items(), key=lambda x: x[1], reverse=True)
+    profit_products = sorted(product_profit.items(), key=lambda x: x[1], reverse=True)
 
     month_keys = sorted(monthly_revenue)
     monthly_labels = []
     monthly_values = []
     for key in month_keys:
-        monthly_labels.append(datetime.strptime(key, "%Y-%m").strftime("%b %Y"))
+        try:
+            label = datetime.strptime(key, "%Y-%m").strftime("%b %Y")
+        except ValueError:
+            label = key
+        monthly_labels.append(label)
         monthly_values.append(round(monthly_revenue[key], 2))
 
     return {
         "total_sales": round(total_revenue, 2),
+        "total_profit": round(total_profit, 2),
         "total_bills": len(bills),
         "total_items": total_items,
         "best_product": products[0][0] if products else "No sales",
@@ -99,6 +113,8 @@ def dashboard_data():
         "product_quantities": [p[1] for p in products],
         "revenue_product_names": [p[0] for p in revenue_products],
         "revenue_product_values": [round(p[1], 2) for p in revenue_products],
+        "profit_product_names": [p[0] for p in profit_products],
+        "profit_product_values": [round(p[1], 2) for p in profit_products],
         "months": monthly_labels,
         "month_values": monthly_values,
     }

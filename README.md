@@ -18,6 +18,7 @@
 - Best-selling product chart
 - Monthly revenue chart
 - Revenue-by-product chart
+- Profit-by-product chart
 - REST API endpoints
 
 ## Installation
